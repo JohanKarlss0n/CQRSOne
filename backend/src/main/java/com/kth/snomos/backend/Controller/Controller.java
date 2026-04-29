@@ -23,8 +23,6 @@ import java.util.List;
 public class Controller {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private FestivalService festivalService;
 
     /**
@@ -34,11 +32,11 @@ public class Controller {
     ////////////////////////////////////User//////////////////
     @PostMapping("/user/save")
     public String postUser(@RequestBody User user) {
-        if(userService.userExists(user.getUsername())) {
+        if(festivalService.userExists(user.getUsername())) {
             return "Username-Taken";
         }
         try {
-            return userService.saveUser(user);
+            return festivalService.saveUser(user);
         } catch (IllegalArgumentException e) {
             return "Error-Email";
         }
@@ -48,7 +46,7 @@ public class Controller {
     public String changeEmail(@PathVariable("userid") int userid, @PathVariable("email") String email) {
         try {
             Email emailObj = new Email(email);
-            userService.changeUserEmail(emailObj.getEmail(), userid);
+            festivalService.changeUserEmail(emailObj.getEmail(), userid);
             return "Updated";
         } catch (IllegalArgumentException e) {
             return "Error";
@@ -57,27 +55,27 @@ public class Controller {
 
     @GetMapping("/user/check/{username}")
     public boolean userExists(@PathVariable String username) {
-        return userService.userExists(username);
+        return festivalService.userExists(username);
     }
 
     @GetMapping("/user/findall")
     public List<User> getAllUsers() {
-        return userService.findAllUsers();
+        return festivalService.findAllUsers();
     }
 
     @GetMapping("/user/login/{username}/{password}")
     public long findByName(@PathVariable String username, @PathVariable String password) {
-        return userService.login(username, password);
+        return festivalService.login(username, password);
     }
 
     @GetMapping("/user/getEmail/{userId}")
     public String getEmail(@PathVariable int userId) {
-        return userService.getUserEmail(userId);
+        return festivalService.getUserEmail(userId);
     }
 
     @DeleteMapping("/user/delete/{userid}")
     public void deleteUser(@PathVariable int userid) {
-        userService.deleteUser(userid);
+        festivalService.deleteUser(userid);
     }
 
 
@@ -159,7 +157,7 @@ public class Controller {
     ////////////////////////////////////Booking///////////////
     @PostMapping("/booking/{festivalID}/{userID}")
     public String postBooking(@PathVariable long festivalID, @PathVariable long userID) {
-        User user = userService.findUserById(userID);
+        User user = festivalService.findUserById(userID);
         Festival festival = festivalService.findFestivalById(festivalID);
         if (user == null) {
             return "Null-User";
@@ -171,7 +169,7 @@ public class Controller {
 
     @GetMapping("/booking/{userId}")
     public List<Festival> getBookings(@PathVariable long userId) {
-        return userService.getBookingsByUser(userId);
+        return festivalService.getBookingsByUser(userId);
     }
 
     /**
@@ -221,7 +219,7 @@ public class Controller {
     @PostMapping("/admin/save")
     public String addAdmin(@RequestBody Admin admin) {
         try {
-            return userService.saveAdmin(admin);
+            return festivalService.saveAdmin(admin);
         } catch (IllegalArgumentException e) {
             return "Error-Email";
         }
@@ -229,11 +227,11 @@ public class Controller {
 
     @GetMapping("/admin/findByID/{adminID}")
     public Admin findAdminById(@PathVariable long adminID) {
-        return userService.findAdminById(adminID);
+        return festivalService.findAdminById(adminID);
     }
 
     @DeleteMapping("/admin/delete/{adminId}")
     public void deleteAdmin(@PathVariable long adminId) {
-        userService.deleteAdmin(adminId);
+        festivalService.deleteAdmin(adminId);
     }
 }
