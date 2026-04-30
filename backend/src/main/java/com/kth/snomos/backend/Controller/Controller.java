@@ -23,7 +23,9 @@ import java.util.List;
 public class Controller {
 
     @Autowired
-    private FestivalService festivalService;
+    private CommandService commandService;
+    @Autowired
+    private QueryService queryService;
 
     /**
      * Part of the REST controller that handles endpoints for User.
@@ -32,11 +34,11 @@ public class Controller {
     ////////////////////////////////////User//////////////////
     @PostMapping("/user/save")
     public String postUser(@RequestBody User user) {
-        if(festivalService.userExists(user.getUsername())) {
+        if(queryService.userExists(user.getUsername())) {
             return "Username-Taken";
         }
         try {
-            return festivalService.saveUser(user);
+            return commandService.saveUser(user);
         } catch (IllegalArgumentException e) {
             return "Error-Email";
         }
@@ -46,7 +48,7 @@ public class Controller {
     public String changeEmail(@PathVariable("userid") int userid, @PathVariable("email") String email) {
         try {
             Email emailObj = new Email(email);
-            festivalService.changeUserEmail(emailObj.getEmail(), userid);
+            commandService.changeUserEmail(emailObj.getEmail(), userid);
             return "Updated";
         } catch (IllegalArgumentException e) {
             return "Error";
@@ -55,27 +57,27 @@ public class Controller {
 
     @GetMapping("/user/check/{username}")
     public boolean userExists(@PathVariable String username) {
-        return festivalService.userExists(username);
+        return queryService.userExists(username);
     }
 
     @GetMapping("/user/findall")
     public List<User> getAllUsers() {
-        return festivalService.findAllUsers();
+        return queryService.findAllUsers();
     }
 
     @GetMapping("/user/login/{username}/{password}")
     public long findByName(@PathVariable String username, @PathVariable String password) {
-        return festivalService.login(username, password);
+        return queryService.login(username, password);
     }
 
     @GetMapping("/user/getEmail/{userId}")
     public String getEmail(@PathVariable int userId) {
-        return festivalService.getUserEmail(userId);
+        return queryService.getUserEmail(userId);
     }
 
     @DeleteMapping("/user/delete/{userid}")
     public void deleteUser(@PathVariable int userid) {
-        festivalService.deleteUser(userid);
+        commandService.deleteUser(userid);
     }
 
 
@@ -86,68 +88,68 @@ public class Controller {
     ////////////////////////////////////Festival//////////////
     @PostMapping("/festival/save")
     public void postFestival(@RequestBody Festival festival) {
-        festivalService.saveFestival(festival);
+        commandService.saveFestival(festival);
     }
 
     @PostMapping("/festival/update/{festivalId}")
     public void addArtistsToFestival(@PathVariable long festivalId, @RequestBody Festival festival) {
-        festivalService.addArtistsToFestival(festivalId, festival.getArtists());
-        festivalService.updateFestivalDescription(festivalId, festival.getFestivalDescription());
+        commandService.addArtistsToFestival(festivalId, festival.getArtists());
+        commandService.updateFestivalDescription(festivalId, festival.getFestivalDescription());
     }
 
     @PutMapping("/festival/update/description/{festivalId}")
     public void updateFestivalDescription(@PathVariable long festivalId, @RequestBody String description) {
-        festivalService.updateFestivalDescription(festivalId, description);
+        commandService.updateFestivalDescription(festivalId, description);
     }
 
     @PutMapping("/festival/updateUrl/{festivalId}")
     public void updateFestivalUrl(@PathVariable long festivalId, @RequestBody String url) {
-        festivalService.updateFestivalURL(festivalId, url);
+        commandService.updateFestivalURL(festivalId, url);
     }
 
     @GetMapping("/festival/findbyid/{festivalId}")
     public Festival getFestivalById(@PathVariable long festivalId) {
-        return festivalService.findFestivalById(festivalId);
+        return queryService.findFestivalById(festivalId);
     }
 
     @GetMapping("/festival/getartists/{festivalId}")
     public List<Artist> getArtistsByFestivalId(@PathVariable long festivalId) {
-        return festivalService.findFestivalById(festivalId).getArtists();
+        return queryService.findFestivalById(festivalId).getArtists();
     }
 
     @GetMapping("/festival/findbyname/{name}")
     public List<Festival> findFestivalByName(@PathVariable String name) {
-        return festivalService.findFestivalByName(name);
+        return queryService.findFestivalByName(name);
     }
 
     @GetMapping("/festival/findbydate/{date}")
     public List<Festival> findFestivalByDate(@PathVariable LocalDate date) {
-        return festivalService.findFestivalByDate(date);
+        return queryService.findFestivalByDate(date);
     }
 
     @GetMapping("/festival/findbylocation/{location}")
     public List<Festival> findFestivalByLocation(@PathVariable String location) {
-        return festivalService.findFestivalByLocation(location);
+        return queryService.findFestivalByLocation(location);
     }
 
     @GetMapping("/festival/findbyartist/{artist}")
     public List<Festival> findFestivalByArtist(@PathVariable String artist) {
-        return festivalService.findFestivalByArtist(artist);
+        return queryService.findFestivalByArtist(artist);
     }
 
     @GetMapping("/festival/findall")
     public List<Festival> getAllFestivals() {
-        return festivalService.findAllFestivals();
+        return queryService.findAllFestivals();
     }
 
     @GetMapping("/festival/upcoming")
     public List<Festival> getUpcomingFestivals() {
-        return festivalService.getUpcomingFestivals();
+        return queryService.getUpcomingFestivals();
     }
 
     @DeleteMapping("/festival/delete/{festivalId}")
     public void deleteFestival(@PathVariable long festivalId) {
-        festivalService.deleteFestival(festivalId);
+        commandService.deleteFestival(festivalId);
     }
 
     /**
@@ -157,19 +159,19 @@ public class Controller {
     ////////////////////////////////////Booking///////////////
     @PostMapping("/booking/{festivalID}/{userID}")
     public String postBooking(@PathVariable long festivalID, @PathVariable long userID) {
-        User user = festivalService.findUserById(userID);
-        Festival festival = festivalService.findFestivalById(festivalID);
+        User user = queryService.findUserById(userID);
+        Festival festival = queryService.findFestivalById(festivalID);
         if (user == null) {
             return "Null-User";
         } else if (festival == null) {
             return "Null-Festival";
         }
-        return festivalService.saveBooking(new Booking(user, festival));
+        return commandService.saveBooking(new Booking(user, festival));
     }
 
     @GetMapping("/booking/{userId}")
     public List<Festival> getBookings(@PathVariable long userId) {
-        return festivalService.getBookingsByUser(userId);
+        return queryService.getBookingsByUser(userId);
     }
 
     /**
@@ -179,36 +181,36 @@ public class Controller {
     ////////////////////////////////////Artist////////////////
     @PostMapping("/artist/save")
     public String postArtist(@RequestBody Artist artist) {
-        if (festivalService.artistExists(artist.getArtist_name())) {
+        if (queryService.artistExists(artist.getArtist_name())) {
             return "Artist-Exists";
         }
-        festivalService.saveArtist(artist);
+        commandService.saveArtist(artist);
         return "Artist-Saved";
     }
 
     @PutMapping("/artist/updateage")
     public void updateArtistAge(@RequestBody Artist artist) {
-        festivalService.updateArtistAge(artist.getArtist_name(),artist.getAge());
+        commandService.updateArtistAge(artist.getArtist_name(),artist.getAge());
     }
 
     @GetMapping("/artist/findall")
     public List<Artist> findAllArtists() {
-        return festivalService.findAllArtists();
+        return queryService.findAllArtists();
     }
 
     @GetMapping("/artist/getbyname/{name}")
     public Artist getArtistByName(@PathVariable String name) {
-        return festivalService.findArtistByName(name);
+        return queryService.findArtistByName(name);
     }
 
     @GetMapping("/artist/exist/{name}")
     public boolean existArtist(@PathVariable String name) {
-        return festivalService.artistExists(name);
+        return queryService.artistExists(name);
     }
 
     @DeleteMapping("/artist/delete/{artistName}")
     public void deleteArtist(@PathVariable String artistName) {
-        festivalService.deleteArtist(artistName);
+        commandService.deleteArtist(artistName);
     }
 
     /**
@@ -219,7 +221,7 @@ public class Controller {
     @PostMapping("/admin/save")
     public String addAdmin(@RequestBody Admin admin) {
         try {
-            return festivalService.saveAdmin(admin);
+            return commandService.saveAdmin(admin);
         } catch (IllegalArgumentException e) {
             return "Error-Email";
         }
@@ -227,11 +229,11 @@ public class Controller {
 
     @GetMapping("/admin/findByID/{adminID}")
     public Admin findAdminById(@PathVariable long adminID) {
-        return festivalService.findAdminById(adminID);
+        return queryService.findAdminById(adminID);
     }
 
     @DeleteMapping("/admin/delete/{adminId}")
     public void deleteAdmin(@PathVariable long adminId) {
-        festivalService.deleteAdmin(adminId);
+        commandService.deleteAdmin(adminId);
     }
 }

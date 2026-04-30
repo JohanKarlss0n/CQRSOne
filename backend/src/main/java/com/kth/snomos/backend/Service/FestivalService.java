@@ -1,7 +1,7 @@
 package com.kth.snomos.backend.Service;
 
 import com.kth.snomos.backend.Entity.*;
-import com.kth.snomos.backend.Repository.*;
+import com.kth.snomos.backend.Repository.Interface.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,7 @@ public class FestivalService {
 
     /**
      * Retrieves all upcoming festivals.
+     *!
      *
      * @return List of upcoming festivals.
      */
@@ -42,7 +43,7 @@ public class FestivalService {
 
     /**
      * Finds festivals by their name.
-     *
+     *!
      * @param name Festival name.
      * @return List of festivals matching the name.
      */
@@ -52,7 +53,7 @@ public class FestivalService {
 
     /**
      * Finds festivals occurring on a specific date.
-     *
+     *!
      * @param date The date to search for.
      * @return List of festivals on that date.
      */
@@ -62,7 +63,7 @@ public class FestivalService {
 
     /**
      * Finds festivals held at a specific location.
-     *
+     *!
      * @param location The location name.
      * @return List of festivals in that location.
      */
@@ -72,7 +73,7 @@ public class FestivalService {
 
     /**
      * Finds festivals where a specific artist is performing.
-     *
+     *!
      * @param artist Artist name.
      * @return List of festivals that include the artist.
      */
@@ -82,7 +83,7 @@ public class FestivalService {
 
     /**
      * Retrieves upcoming festivals sorted appropriately.
-     *
+     *!
      * @return List of upcoming festivals.
      */
     public List<Festival> getUpcomingFestivals() {
@@ -91,7 +92,7 @@ public class FestivalService {
 
     /**
      * Retrieves all artists in the system.
-     *
+     *!
      * @return List of all artists.
      */
     public List<Artist> findAllArtists(){
@@ -100,7 +101,7 @@ public class FestivalService {
 
     /**
      * Finds a festival by its unique ID.
-     *
+     *!
      * @param id The festival ID.
      * @return The festival if found, otherwise throws exception.
      */
@@ -110,7 +111,7 @@ public class FestivalService {
 
     /**
      * Finds an artist by their name, if they exist.
-     *
+     *!
      * @param name Artist's name.
      * @return Artist object if found, otherwise null.
      */
@@ -120,7 +121,7 @@ public class FestivalService {
 
     /**
      * Checks if an artist with the given name exists.
-     *
+     *!
      * @param name Artist's name.
      * @return true if the artist exists, false otherwise.
      */
@@ -130,7 +131,7 @@ public class FestivalService {
 
     /**
      * Saves a new festival to the repository.
-     *
+     *!
      * @param festival Festival object to be saved.
      */
     public void saveFestival(Festival festival) {
@@ -139,7 +140,7 @@ public class FestivalService {
 
     /**
      * Saves a new artist to the repository.
-     *
+     *!
      * @param artist Artist object to be saved.
      */
     public void saveArtist(Artist artist) {
@@ -148,7 +149,7 @@ public class FestivalService {
 
     /**
      * Adds a list of artists to an existing festival.
-     *
+     *!
      * @param festivalId ID of the festival.
      * @param artistList List of artists to add.
      */
@@ -164,7 +165,7 @@ public class FestivalService {
 
     /**
      * Deletes a festival by its ID.
-     *
+     *!
      * @param festivalId ID of the festival to delete.
      */
     @Transactional
@@ -174,7 +175,7 @@ public class FestivalService {
 
     /**
      * Deletes an artist by their name.
-     *
+     *!
      * @param artistName Name of the artist to delete.
      */
     @Transactional
@@ -184,7 +185,7 @@ public class FestivalService {
 
     /**
      * Updates the description of a festival.
-     *
+     *!
      * @param festivalId ID of the festival.
      * @param description New description to be set.
      */
@@ -195,7 +196,7 @@ public class FestivalService {
 
     /**
      * Updates the URL of a festival.
-     *
+     *!
      * @param festivalId ID of the festival.
      * @param url New URL to be set.
      */
@@ -206,7 +207,7 @@ public class FestivalService {
 
     /**
      * Updates the age of a specific artist.
-     *
+     *!
      * @param artistName Name of the artist.
      * @param age New age to be set.
      */
@@ -218,7 +219,7 @@ public class FestivalService {
     /**
      * Saves a booking for a user to a festival if tickets are available.
      * Reduces ticket count accordingly.
-     *
+     *!
      * @param booking Booking object containing user and festival information.
      * @return "No tickets left" if unavailable, otherwise "Booking saved".
      */
@@ -233,7 +234,7 @@ public class FestivalService {
     }
     /**
      * Saves a new user to the repository.
-     *
+     *!
      * @param user The user object to be saved.
      * @return "Success" after saving.
      */
@@ -244,7 +245,7 @@ public class FestivalService {
 
     /**
      * Saves a new admin to the repository.
-     *
+     *!
      * @param admin The admin object to be saved.
      */
     public String saveAdmin(Admin admin) {
@@ -255,7 +256,7 @@ public class FestivalService {
 
     /**
      * Retrieves a list of all registered users.
-     *
+     *!
      * @return List of all users.
      */
     public List<User> findAllUsers() {
@@ -264,7 +265,7 @@ public class FestivalService {
 
     /**
      * Finds a user by their unique ID.
-     *
+     *!
      * @param id The user ID.
      * @return User object if found, otherwise throws an exception.
      */
@@ -274,7 +275,7 @@ public class FestivalService {
 
     /**
      * Finds an admin by their unique ID.
-     *
+     *!
      * @param id The admin ID.
      * @return Admin object if found, otherwise throws an exception.
      */
@@ -284,7 +285,7 @@ public class FestivalService {
 
     /**
      * Authenticates a user or admin based on credentials.
-     *
+     *!
      * @param name Username.
      * @param password Password.
      * @return User ID if user login is successful, -1 if password is incorrect,
@@ -301,7 +302,7 @@ public class FestivalService {
 
     /**
      * Checks if a user with the given username exists.
-     *
+     *!
      * @param username Username to check.
      * @return true if the user exists, false otherwise.
      */
@@ -311,7 +312,7 @@ public class FestivalService {
 
     /**
      * Retrieves the email address of a user by their ID.
-     *
+     *!
      * @param userId ID of the user.
      * @return Email address of the user.
      */
@@ -321,7 +322,7 @@ public class FestivalService {
 
     /**
      * Retrieves all bookings associated with a given user.
-     *
+     *!
      * @param id ID of the user.
      * @return List of festivals the user is booked for.
      */
@@ -331,7 +332,7 @@ public class FestivalService {
 
     /**
      * Updates a user's email address.
-     *
+     *!
      * @param email New email address.
      * @param id ID of the user.
      */
@@ -342,7 +343,7 @@ public class FestivalService {
 
     /**
      * Deletes a user by their ID.
-     *
+     *!
      * @param id ID of the user to delete.
      */
     @Transactional
@@ -352,7 +353,7 @@ public class FestivalService {
 
     /**
      * Deletes an admin by their ID.
-     *
+     *!
      * @param id ID of the admin to delete.
      */
     @Transactional

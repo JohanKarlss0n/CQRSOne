@@ -1,4 +1,4 @@
-package com.kth.snomos.backend.Repository;
+package com.kth.snomos.backend.Repository.Interface;
 
 import com.kth.snomos.backend.Entity.Artist;
 import org.springframework.data.jpa.repository.JpaRepository;
