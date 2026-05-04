@@ -23,6 +23,6 @@ public interface UserQueryRepo extends JpaRepository<User,Long> {
             "WHERE b.userid = :userid ORDER BY festival_date, festival_name", nativeQuery = true)
     List<Festival> findBookingsByUser (@Param("userid") long userid);
 
-    @Query(value = "SELECT email FROM festival_user WHERE userid = :val", nativeQuery = true)
+    @Query(value = "SELECT email FROM festival_user WHERE user_id = :val", nativeQuery = true)
     String getEmail(@Param("val") int userid);
 }
